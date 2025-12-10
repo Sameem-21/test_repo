@@ -16,7 +16,9 @@ provider "aws"{
 
 resource "aws_vpc" "test_vpc"{
     cidr_block = "0.0.0.0/16"
-
+  lifecycle {
+      create_before_destroy= true
+    }
     tags={
         name= "test_vpc"
     }
@@ -27,7 +29,7 @@ resource "aws_subnet" "test_subnet"{
     vpc_id            = aws_vpc.test_vpc.id
     cidr_block        = "10.0.5.0/24"
     availability_zone = "ap-south-1a"
-
+    
     tags={
         Name= "test_subnet"
     }
@@ -93,11 +95,11 @@ resource "aws_security_group" "test_sg"{
         cidr_blocks = ["0.0.0.0/0"]
     }
 }
-
 #EC2 instance creation
 
 data "aws_ami" "ubuntu" {
   most_recent = true
+  owners      = ["099720109477"] # Canonical's AWS account ID
 
   filter {
     name   = "name"
