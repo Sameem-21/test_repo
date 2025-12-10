@@ -15,7 +15,7 @@ provider "aws"{
 #VPC creation
 
 resource "aws_vpc" "test_vpc"{
-    cidr_block = "0.0.0.0/16"
+    cidr_block = "10.0.0.0/16"
   lifecycle {
       create_before_destroy= true
     }
