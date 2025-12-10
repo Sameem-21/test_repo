@@ -1,1 +1,84 @@
+name: test_file
+
+on: 
+    workflow_dispatch:
+        
+    push:
+        branches: [main]
+ 
+        
+jobs:
+    build:
+        runs-on : self-hosted
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v2
+              
+            - name: setup node
+              uses: actions/setup-node@v3
+              with:
+                node-version: '18'
+              
+            - name: terraform init
+              run: terraform init -upgrade
+
+            - name: terraform validate
+              run : terraform validate
+    test: 
+        runs-on: self-hosted
+        needs: build
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v2
+              
+            - name: setup node
+              uses: actions/setup-node@v3
+              with:
+                node-version: '18'
+              
+            - name: terraform init
+              run: terraform init -upgrade
+
+            - name: terraform plan
+              run : terraform plan -out=tfplan.binary
+
+    deploy:
+        runs-on: self-hosted
+        needs: test
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v2
+              
+            - name: setup node
+              uses: actions/setup-node@v3
+              with:
+                node-version: '18'
+              
+            - name: terraform init
+              run: terraform init -upgrade
+
+            - name: terraform apply
+              run : terraform apply -auto-approve tfplan.binary
+
+            - name: terraform output
+              run: terraform output -json > tf_output.json
+
+            - name: Connect to EC2
+              run: |
+                 chmod +x loginScript.sh && ./loginScript.sh
+                 echo "Connected to EC2 instance" >> connect.txt
+                 cat connect.txt
+
+
+
+
 
