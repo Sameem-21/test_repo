@@ -46,7 +46,7 @@ jobs:
               run: terraform init -upgrade
 
             - name: terraform plan
-              run : terraform plan -out=tfplan.binary
+              run : terraform plan -out=tfplan
 
     deploy:
         runs-on: self-hosted
@@ -67,10 +67,10 @@ jobs:
               run: terraform init -upgrade
 
             - name: terraform plan
-              run : terraform plan -out=tfplan.binary
+              run : terraform plan -out=tfplan
 
             - name: terraform apply
-              run : terraform apply -auto-approve tfplan.binary
+              run : terraform apply -auto-approve tfplan
 
             - name: terraform output
               run: terraform output -json > tf_output.json
