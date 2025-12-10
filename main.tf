@@ -110,7 +110,7 @@ resource "aws_instance" "test_instance"{
     ami           = data.aws_ami.ubuntu.id #Amazon Linux 2 AMI (HVM), SSD Volume Type for ap-south-1
     subnet_id     = aws_subnet.test_subnet.id
     security_groups = [aws_security_group.test_sg.name]
-    associate_public_ip_address = "True"
+    associate_public_ip_address = true
     tags={
         Name= "test_instance"
     }
