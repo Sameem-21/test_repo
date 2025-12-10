@@ -66,6 +66,9 @@ jobs:
             - name: terraform init
               run: terraform init -upgrade
 
+            - name: terraform plan
+              run : terraform plan -out=tfplan.binary
+
             - name: terraform apply
               run : terraform apply -auto-approve tfplan.binary
 
